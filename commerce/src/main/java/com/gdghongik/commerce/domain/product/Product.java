@@ -1,12 +1,7 @@
 package com.gdghongik.commerce.domain.product;
 
 import com.gdghongik.commerce.domain.common.Quantity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +19,8 @@ public class Product {
     private Long id;
 
     // TODO[W4-1]: 다른 트랜잭션이 이 상품을 먼저 변경했는지 감지할 수 있도록 버전 필드를 추가하세요.
+    @Version
+    private Long version;
 
     private String name;
 
