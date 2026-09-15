@@ -14,14 +14,12 @@ spring:
       path: /h2-console
 
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
-
-# NOTE: show-sql 과 Hibernate 로그 레벨은 의도적으로 비워둔다.
-#       5주차 TODO-1에서 수강생이 직접 켜는 실습이다.
 
 springdoc:
   swagger-ui:

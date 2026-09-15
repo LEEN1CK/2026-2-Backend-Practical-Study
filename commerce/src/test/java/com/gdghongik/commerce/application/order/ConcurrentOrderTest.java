@@ -28,10 +28,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(properties = {
-        "logging.level.org.hibernate.SQL=DEBUG",
-        "spring.jpa.properties.hibernate.format_sql=true"
-})
+@SpringBootTest
 @ActiveProfiles("test")
 @Import(ConcurrentOrderTest.ConcurrentOrderTestConfiguration.class)
 class ConcurrentOrderTest {

@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(properties = {
-        "logging.level.org.hibernate.SQL=DEBUG",
-        "spring.jpa.properties.hibernate.format_sql=true"
-})
+@SpringBootTest
 @ActiveProfiles("test")
 class ProductPersistenceContextTest {
 
