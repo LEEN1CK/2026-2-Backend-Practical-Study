@@ -31,7 +31,7 @@ public class OrderService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "상품이 존재하지 않습니다. id=" + command.productId()));
 
-        // TODO[W4-0]: 주문할 상품의 재고를 주문 수량만큼 차감하세요. (수업에서 함께 작성)
+        // TODO[W4-0]: 주문할 상품의 재고를 주문 수량만큼 차감하세요.
         product.decreaseStock(Quantity.of(command.quantity()));
 
         OrderItem item = OrderItem.create(
