@@ -1,6 +1,6 @@
 
 ## 1. Service 계층의 분리
-    기존 Controller-Service-Repository 아키텍쳐 환경에서는 대부분의 비즈니스 로직이 Service에 집중되는 문제가 있다.
+    Controller-Service-Repository 아키텍쳐 환경에서는 대부분의 비즈니스 로직이 Service에 집중되는 문제가 있다.
 
   ### AS-IS 문제점
     - @Setter의 무분별한 사용으로 엔티티 상태를 외부에서 자유롭게 변경할 수 잆는 우회로가 생긴다.
