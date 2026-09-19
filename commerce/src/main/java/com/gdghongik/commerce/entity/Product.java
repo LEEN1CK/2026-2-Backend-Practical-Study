@@ -13,7 +13,6 @@ import lombok.Setter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
@@ -42,7 +41,20 @@ public class Product {
     }
 
     public void decreaseStock(int quantity) {
-        // TODO[W1-4]: 재고 감소 규칙을 여기에 구현하세요.
-        throw new UnsupportedOperationException("TODO[W1-4]");
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
+        }
+        if (this.status != SellingStatus.SELLING) {
+            throw new IllegalStateException("판매 중인 상품이 아닙니다.");
+        }
+        if (this.stock < quantity) {
+            throw new IllegalStateException("재고가 부족합니다. 남은 재고=" + this.stock);
+        }
+
+        this.stock -= quantity;
+
+        if (this.stock  == 0) {
+            this.status = SellingStatus.SOLD_OUT;
+        }
     }
 }

@@ -44,8 +44,10 @@ class ProductServiceTest {
         // given
         Product product = productRepository.save(new Product("기계식 키보드", 129_000L, 10));
 
-        // TODO[W1-1]: 수량이 0 이하일 때 예외가 발생하는지 검증하세요.
-        fail("TODO[W1-1] 을 작성하세요");
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("수량은 1개 이상이어야 합니다.");
     }
 
     @Test
@@ -54,8 +56,10 @@ class ProductServiceTest {
         // given
         Product product = productRepository.save(new Product("무선 마우스", 45_000L, 3));
 
-        // TODO[W1-2]: 재고보다 많이 주문하면 예외가 발생하는지 검증하세요.
-        fail("TODO[W1-2] 를 작성하세요");
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("재고가 부족합니다.");
     }
 
     @Test
@@ -66,7 +70,9 @@ class ProductServiceTest {
         product.stopSelling();
         productRepository.save(product);
 
-        // TODO[W1-3]: 판매 중이 아닌 상품이면 예외가 발생하는지 검증하세요.
-        fail("TODO[W1-3] 을 작성하세요");
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("판매 중인 상품이 아닙니다.");
     }
 }
