@@ -1,5 +1,5 @@
 
-## 1. Service 계층의 분리
+# 1. Service 계층의 분리
     Controller-Service-Repository 아키텍쳐 환경에서는 대부분의 비즈니스 로직이 Service에 집중되는 문제가 있다.
 
   ### AS-IS 문제점
@@ -11,7 +11,7 @@
     - 엔티티에서 @Setter를 없애 우회로를 막는다.
     - 데이터 변경, 검증을 엔티티 내부 매서드에서 처리하게 한다.
 
-## 2. 테스트 코드 기반의 Refactoring
+# 2. 테스트 코드 기반의 Refactoring
     수동 테스트(Postman, Swagger)에 의존하는 대신 자동화된 테스트 코드를 통해 안전하게 검증한다.
 
   ### 단위 테스트 vs 통합 테스트
