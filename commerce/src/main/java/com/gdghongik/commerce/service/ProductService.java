@@ -1,6 +1,7 @@
 package com.gdghongik.commerce.service;
 
 import com.gdghongik.commerce.entity.Product;
+import com.gdghongik.commerce.entity.Quantity;
 import com.gdghongik.commerce.repository.ProductRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ProductService {
      * 재고를 줄여도 되는지에 대한 판단은 Product가 직접 합니다.
      */
     @Transactional
-    public void decreaseStock(Long productId, int quantity) {
+    public void decreaseStock(Long productId, Quantity quantity) {
         Product product = findById(productId);
         product.decreaseStock(quantity);
         productRepository.save(product);

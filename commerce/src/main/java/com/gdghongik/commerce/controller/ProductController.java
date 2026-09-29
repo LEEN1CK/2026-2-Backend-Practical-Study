@@ -3,6 +3,7 @@ package com.gdghongik.commerce.controller;
 import com.gdghongik.commerce.dto.DecreaseStockRequest;
 import com.gdghongik.commerce.dto.ProductCreateRequest;
 import com.gdghongik.commerce.dto.ProductResponse;
+import com.gdghongik.commerce.entity.Quantity;
 import com.gdghongik.commerce.service.ProductService;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -45,7 +46,7 @@ public class ProductController {
     @PostMapping("/{productId}/decrease-stock")
     public ProductResponse decreaseStock(@PathVariable Long productId,
                                          @RequestBody DecreaseStockRequest request) {
-        productService.decreaseStock(productId, request.quantity());
+        productService.decreaseStock(productId, Quantity.of(request.quantity()));
         return ProductResponse.from(productService.findById(productId));
     }
 }

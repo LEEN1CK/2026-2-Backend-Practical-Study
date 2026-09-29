@@ -89,6 +89,16 @@ class OrderTest {
     }
 
     @Test
+    @DisplayName("주문에는 1개 이상의 항목이 존재해야 한다")
+    void 주문에는_1개_이상의_항목이_존재해야_한다() {
+        Order order = Order.place(keyboardItem);
+
+        assertThatThrownBy(() -> order.cancelItem(keyboardItem))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("주문에는 1개 이상이어야 한다.");
+    }
+
+    @Test
     @DisplayName("배송이 완료된 주문도 취소할 수 없다")
     void 배송이_완료된_주문도_취소할_수_없다() {
         Order order = Order.place(keyboardItem);
