@@ -52,8 +52,13 @@ class ProductServiceTest {
         // given
         Product product = productRepository.save(new Product("기계식 키보드", 129_000L, 10));
 
+<<<<<<< HEAD
         // when & then, 상품을 0개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> productService.decreaseStock(product.getId(), Quantity.of(0)))
+=======
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 0))
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("수량은 1개 이상이어야 합니다.");
     }
@@ -64,10 +69,17 @@ class ProductServiceTest {
         // given - 재고가 3개인 상품
         Product product = productRepository.save(new Product("무선 마우스", 45_000L, 3));
 
+<<<<<<< HEAD
         // when & then, 재고가 3개인 상품을 4개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> productService.decreaseStock(product.getId(), Quantity.of(4)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("재고가 부족합니다");
+=======
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("재고가 부족합니다.");
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
     }
 
     @Test
@@ -78,8 +90,13 @@ class ProductServiceTest {
         product.stopSelling();
         productRepository.save(product);
 
+<<<<<<< HEAD
         // when & then, 상태가 STOPPED인 상품을 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> productService.decreaseStock(product.getId(), Quantity.of(1)))
+=======
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("판매 중인 상품이 아닙니다.");
     }

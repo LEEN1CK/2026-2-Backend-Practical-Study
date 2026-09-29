@@ -42,6 +42,7 @@ public class Product {
         this.status = SellingStatus.STOPPED;
     }
 
+<<<<<<< HEAD
     /**
      * 재고를 quantity만큼 줄입니다.
      *
@@ -58,6 +59,22 @@ public class Product {
         this.stock -= quantity.value();
 
         if (this.stock == 0) {
+=======
+    public void decreaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
+        }
+        if (this.status != SellingStatus.SELLING) {
+            throw new IllegalStateException("판매 중인 상품이 아닙니다.");
+        }
+        if (this.stock < quantity) {
+            throw new IllegalStateException("재고가 부족합니다. 남은 재고=" + this.stock);
+        }
+
+        this.stock -= quantity;
+
+        if (this.stock  == 0) {
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
             this.status = SellingStatus.SOLD_OUT;
         }
     }

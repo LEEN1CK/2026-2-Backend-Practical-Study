@@ -1,5 +1,6 @@
 package com.gdghongik.commerce.entity;
 
+<<<<<<< HEAD
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -10,6 +11,13 @@ import org.junit.jupiter.api.Test;
  * 스프링을 띄우지 않고, Repository도 주입하지 않습니다.
  * 단위 테스트는 Java 코드 그 자체로 로직상의 결함이 없는지 테스트합니다.
  */
+=======
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.*;
+
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
 class ProductTest {
 
     @Test
@@ -32,8 +40,13 @@ class ProductTest {
         // given
         Product product = new Product("기계식 키보드", 129_000L, 10);
 
+<<<<<<< HEAD
         // when & then, 상품을 0개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> product.decreaseStock(Quantity.of(0)))
+=======
+        // when & then
+        assertThatThrownBy(() -> product.decreaseStock(0))
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("수량은 1개 이상이어야 합니다.");
     }
@@ -44,10 +57,17 @@ class ProductTest {
         // given
         Product product = new Product("무선 마우스", 45_000L, 3);
 
+<<<<<<< HEAD
         // when & then, 재고가 3개인 상품을 4개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> product.decreaseStock(Quantity.of(4)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("재고가 부족합니다");
+=======
+        // when & then
+        assertThatThrownBy(() -> product.decreaseStock(4))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("재고가 부족합니다.");
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
     }
 
     @Test
@@ -57,8 +77,13 @@ class ProductTest {
         Product product = new Product("단종된 USB 허브", 25_000L, 5);
         product.stopSelling();
 
+<<<<<<< HEAD
         // when & then, 상태가 STOPPED인 상품을 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
         assertThatThrownBy(() -> product.decreaseStock(Quantity.of(1)))
+=======
+        // when & then
+        assertThatThrownBy(() -> product.decreaseStock(4))
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("판매 중인 상품이 아닙니다.");
     }
