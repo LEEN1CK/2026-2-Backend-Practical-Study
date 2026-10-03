@@ -43,12 +43,15 @@ public class Product {
         this.status = SellingStatus.STOPPED;
     }
 
+<<<<<<< HEAD
     /**
      * 재고를 quantity만큼 줄입니다.
      *
      * 재고를 줄여도 되는지에 대한 판단은 변경되는 주체인 Product 엔티티가 직접 판단한다.
      */
     public void decreaseStock(Quantity quantity) {
+<<<<<<< HEAD:commerce/src/main/java/com/gdghongik/commerce/domain/product/Product.java
+=======
         if (this.status != SellingStatus.SELLING) {
             throw new IllegalStateException("판매 중인 상품이 아닙니다.");
         }
@@ -59,6 +62,23 @@ public class Product {
         this.stock -= quantity.value();
 
         if (this.stock == 0) {
+=======
+    public void decreaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("수량은 1개 이상이어야 합니다.");
+        }
+>>>>>>> 8dcae08bde7f15116e8e272b5e3fde7b6fff8234:commerce/src/main/java/com/gdghongik/commerce/entity/Product.java
+        if (this.status != SellingStatus.SELLING) {
+            throw new IllegalStateException("판매 중인 상품이 아닙니다.");
+        }
+        if (this.stock < quantity.value()) {
+            throw new IllegalStateException("재고가 부족합니다. 남은 재고=" + this.stock);
+        }
+
+        this.stock -= quantity.value();
+
+        if (this.stock  == 0) {
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
             this.status = SellingStatus.SOLD_OUT;
         }
     }
