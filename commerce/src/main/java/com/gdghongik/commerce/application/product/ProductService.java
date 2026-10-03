@@ -2,6 +2,7 @@ package com.gdghongik.commerce.application.product;
 
 import com.gdghongik.commerce.domain.common.Quantity;
 import com.gdghongik.commerce.domain.product.Product;
+import com.gdghongik.commerce.domain.product.ProductRepository;
 import com.gdghongik.commerce.infrastructure.persistence.ProductJpaRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ProductService {
 
-    // TODO[W3-2]: 아래 주입 타입을 domain 의 ProductRepository 로 바꾸세요.
-    //             OrderService 에도 같은 타입이 있습니다. 거기도 같이 바꾸세요.
-    //             바꾸고 나면 애플리케이션이 뜨지 않습니다. 오류 메시지를 읽고 W3-3 으로 가세요.
-    private final ProductJpaRepository productRepository;
+    private final ProductRepository productRepository;
 
     public List<Product> findAll() {
         return productRepository.findAll();
