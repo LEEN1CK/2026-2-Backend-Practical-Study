@@ -6,11 +6,9 @@ import com.gdghongik.commerce.domain.common.Money;
 import com.gdghongik.commerce.domain.common.Quantity;
 import com.gdghongik.commerce.domain.order.Order;
 import com.gdghongik.commerce.domain.order.OrderItem;
-import com.gdghongik.commerce.domain.order.OrderRepository;
 import com.gdghongik.commerce.domain.product.Product;
+import com.gdghongik.commerce.domain.order.OrderRepository;
 import com.gdghongik.commerce.domain.product.ProductRepository;
-import com.gdghongik.commerce.infrastructure.persistence.OrderJpaRepository;
-import com.gdghongik.commerce.infrastructure.persistence.ProductJpaRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,18 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderService {
 
-    // 과제: 이 줄을 domain 의 OrderRepository 로 바꾸는 것이 이번 주 과제입니다.
     private final OrderRepository orderRepository;
 
-    // TODO[W3-2]: 이 줄도 domain 의 ProductRepository 로 바꾸세요.
     private final ProductRepository productRepository;
 
     @Transactional
     public Long place(CreateOrderCommand command) {
+
+        // TODO[W4-4]: 상품 조회에 findByIdWithLock()을 사용하도록 변경하세요.
         Product product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "상품이 존재하지 않습니다. id=" + command.productId()));
 
+        // TODO[W4-0]: 주문할 상품의 재고를 주문 수량만큼 차감하세요.
+        product.decreaseStock(Quantity.of(command.quantity()));
         OrderItem item = OrderItem.create(
                 product.getId(),
                 product.getName(),

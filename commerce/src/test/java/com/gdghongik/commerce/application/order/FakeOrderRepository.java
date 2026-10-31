@@ -2,9 +2,12 @@ package com.gdghongik.commerce.application.order;
 
 import com.gdghongik.commerce.domain.order.Order;
 import com.gdghongik.commerce.domain.order.OrderRepository;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.*;
 
 public class FakeOrderRepository implements OrderRepository {
 
@@ -21,8 +24,12 @@ public class FakeOrderRepository implements OrderRepository {
     }
 
     @Override
-    public Optional<Order> findById(long id) {return Optional.ofNullable(store.get(id));}
+    public Optional<Order> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
+    }
 
     @Override
-    public List<Order> findAll() {return new ArrayList<>(store.values());}
+    public List<Order> findAll() {
+        return new ArrayList<>(store.values());
+    }
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+
 class OrderTest {
 
     private OrderItem keyboardItem;
@@ -90,16 +91,6 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("주문에는 1개 이상의 항목이 존재해야 한다")
-    void 주문에는_1개_이상의_항목이_존재해야_한다() {
-        Order order = Order.place(keyboardItem);
-
-        assertThatThrownBy(() -> order.cancelItem(keyboardItem))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("주문에는 1개 이상이어야 한다.");
-    }
-
-    @Test
     @DisplayName("배송이 완료된 주문도 취소할 수 없다")
     void 배송이_완료된_주문도_취소할_수_없다() {
         Order order = Order.place(keyboardItem);
@@ -118,38 +109,30 @@ class OrderTest {
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
-    // 이 밑으로 week2 과제였던 주문 항목 하나만 취소하기와 관련된 테스트 코드입니다.
     @Test
     @DisplayName("주문 항목 하나만 취소할 수 있다")
     void 주문_항목_하나만_취소할_수_있다() {
-        // given
         Order order = Order.place(keyboardItem);
         order.addItem(mouseItem);
 
-        // when
         order.cancelItem(mouseItem);
 
-        // then
-        assertThat(order.getOrderItems()).hasSize(1); // 취소하려는 수량의 사이즈는 1이 맞는가?
-        assertThat(order.totalAmount()).isEqualTo(Money.of(129_000L * 2)); // 취소하려는 수량의 금액이 계산한 대로 맞아 떨어지는가?
-        assertThat(order.getStatus()).isEqualTo(OrderStatus.CREATED); // 주문의 상태는 여전히 CREATED인가? (아직 keyboardItem이 남아 있다.)
+        assertThat(order.getOrderItems()).hasSize(1);
+        assertThat(order.totalAmount()).isEqualTo(Money.of(129_000L * 2));
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.CREATED);
     }
 
     @Test
     @DisplayName("마지막 항목을 취소하면 주문 전체가 취소된다")
     void 마지막_항목을_취소하면_주문이_취소된다() {
-        // given
         Order order = Order.place(keyboardItem);
 
-        // when
         order.cancelItem(keyboardItem);
 
-        // then
-        assertThat(order.getOrderItems()).isEmpty(); // 비어있는지 확인한다.
-        assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCELED); // 비어 있으니 주문의 상태가 CANCELED인지 확인한다.
+        assertThat(order.getOrderItems()).isEmpty();
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCELED);
     }
 
-    // 다음 두 테스트는 추가적인 케이스에 대한 테스트입니다. 참고해 주세요.
     @Test
     @DisplayName("배송이 시작되면 항목을 취소할 수 없다")
     void 배송이_시작되면_항목을_취소할_수_없다() {
