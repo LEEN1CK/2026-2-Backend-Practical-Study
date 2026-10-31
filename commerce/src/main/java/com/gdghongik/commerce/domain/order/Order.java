@@ -73,8 +73,6 @@ public class Order {
 
         this.orderItems.remove(item);
 
-        // 항목을 전부 빼게 되면, 주문에는 항목이 1개 이상이어야 하는 불변식이 깨지게 됩니다.
-        // 따라서 항목이 0개가 된 주문은 취소된 주문으로 보게끔 구현했습니다.
         if (this.orderItems.isEmpty()) {
             this.status = OrderStatus.CANCELED;
         }

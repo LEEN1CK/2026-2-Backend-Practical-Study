@@ -24,7 +24,7 @@ public class Quantity {
     }
 
     public int value() {
-        return this.value;
+        return value;
     }
 
     @Override
