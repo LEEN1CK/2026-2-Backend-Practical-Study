@@ -10,12 +10,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 /**
- * 통합 테스트는 실제 DB나 와부 API 등과 연동하여 더 실무적인 관점에서 테스트합니다.
- * 단위 테스트보다 실행 속도가 느리고 에러의 원인 추적이 복잡할 수 있습니다.
- *
- * @SpringBootTest: 실제로 SpringBoot를 구동시켜 테스트를 진행해봅니다.
- * @ActiveProfiles: test 파일에서는 DataInitializer를 실행하지 않습니다.
- * @Transactional: 테스트가 끝나면 저장한 데이터를 되돌립니다. 테스트 데이터가 원본 데이터에 섞이지 않도록 합니다.
+ * FakeProductRepository를 사용해 상품 서비스의 동작을 검증하는 단위 테스트입니다.
+ * 실제 DB 반영과 트랜잭션 동작은 별도의 통합 테스트에서 검증합니다.
  */
 class ProductServiceTest {
 

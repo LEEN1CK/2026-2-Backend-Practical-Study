@@ -30,7 +30,6 @@ public class FakeProductRepository implements ProductRepository {
 
     @Override
     public Optional<Product> findByIdWithLock(Long id) {
-        // ProductRepository에 추가된 메서드를 구현해 기존 단위 테스트를 유지한다.
         // Fake는 실제 DB 잠금 없이 일반 조회만 제공한다.
         // 잠금 동작은 별도의 DB 테스트에서 검증한다.
         return findById(id);

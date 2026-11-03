@@ -26,7 +26,6 @@ public class OrderService {
     @Transactional
     public Long place(CreateOrderCommand command) {
 
-        // Product product = productRepository.findByIdWithLock(command.productId())
         Product product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "상품이 존재하지 않습니다. id=" + command.productId()));

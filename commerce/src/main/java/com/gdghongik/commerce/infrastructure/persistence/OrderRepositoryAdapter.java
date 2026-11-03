@@ -25,6 +25,8 @@ public class OrderRepositoryAdapter implements OrderRepository {
 
     @Override
     public List<Order> findAll() {
+
+        // TODO[W5-2]: 주문 목록 조회가 findAllWithItems()를 사용하도록 변경하세요.
         return jpaRepository.findAll();
     }
 }

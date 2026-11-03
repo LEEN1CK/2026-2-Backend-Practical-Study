@@ -1,15 +1,8 @@
 package com.gdghongik.commerce.domain.order;
 
 import com.gdghongik.commerce.domain.common.Money;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,7 +23,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    // 실험: fetch = FetchType.EAGER를 추가하고 주문 목록 조회 테스트를 실행하세요. SQL 개수를 확인한 뒤 fetch = FetchType.LAZY로 되돌리세요.
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private Order(OrderStatus status) {

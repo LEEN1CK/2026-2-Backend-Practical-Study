@@ -4,4 +4,6 @@ import com.gdghongik.commerce.domain.order.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderJpaRepository extends JpaRepository<Order, Long> {
+    // TODO[W5-1]: DISTINCT Fetch Join으로 주문과 주문 항목을 함께 조회하는 findAllWithItems() 메서드를 작성하세요.
+
 }

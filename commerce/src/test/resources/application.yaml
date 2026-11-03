@@ -6,10 +6,11 @@ spring:
     password:
 
   jpa:
-    # 4주차부터 실습 SQL을 확인하기 위해 로그를 출력한다.
+    # 실습에서 실행되는 SQL을 확인하기 위해 로그를 출력한다.
     show-sql: true
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
+        # TODO[W5-3]: 주문 항목을 10개씩 묶어서 조회하도록 Batch Size를 설정하세요.
