@@ -1,0 +1,41 @@
+package com.gdghongik.commerce.application.product;
+
+import com.gdghongik.commerce.domain.common.Quantity;
+import com.gdghongik.commerce.domain.product.Product;
+import com.gdghongik.commerce.domain.product.ProductRepository;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class ProductService {
+
+    private final ProductRepository productRepository;
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+
+    public Product findById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("상품이 존재하지 않습니다. id=" + productId));
+    }
+
+    @Transactional
+    public Product create(String name, long price, int stock) {
+        return productRepository.save(new Product(name, price, stock));
+    }
+
+    /**
+     * 상품을 조회해 재고를 차감합니다. 변경 내용은 트랜잭션의 변경 감지로 반영됩니다.
+     * 재고를 줄여도 되는지에 대한 판단은 Product가 직접 합니다.
+     */
+    @Transactional
+    public void decreaseStock(Long productId, int quantity) {
+        Product product = findById(productId);
+        product.decreaseStock(Quantity.of(quantity));
+    }
+}
