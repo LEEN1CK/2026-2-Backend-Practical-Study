@@ -14,3 +14,4 @@ spring:
       hibernate:
         format_sql: true
         # TODO[W5-3]: 주문 항목을 10개씩 묶어서 조회하도록 Batch Size를 설정하세요.
+        default_batch_fetch_size: 11

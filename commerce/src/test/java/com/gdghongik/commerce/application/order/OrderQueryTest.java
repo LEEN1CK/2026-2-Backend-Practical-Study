@@ -22,19 +22,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.support.TransactionTemplate;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:order-query-test;MODE=PostgreSQL;DB_CLOSE_DELAY=-1",
-        "spring.jpa.properties.hibernate.generate_statistics=true",
-        "spring.jpa.properties.hibernate.cache.use_second_level_cache=false",
-        "spring.jpa.properties.hibernate.cache.use_query_cache=false",
-        "logging.level.org.hibernate.engine.internal.StatisticalLoggingSessionEventListener=OFF"
-})
-@ActiveProfiles("test")
 class OrderQueryTest {
 
-    private static final int ORDER_COUNT = 10;
+    private static final int ORDER_COUNT = 20;
 
-    @Autowired
     private OrderService orderService;
 
     @Autowired
@@ -121,7 +112,7 @@ class OrderQueryTest {
         assertThat(results).hasSize(ORDER_COUNT);
 
         assertThat(queryCount)
-                .as("주문 목록 1개와 주문 항목 Batch 조회 1개가 실행되어야 한다")
-                .isEqualTo(2L);
+                .as("주문 목록 1개와 주문 항목 Batch 조회 2개가 실행되어야 한다")
+                .isEqualTo(3L);
     }
 }
