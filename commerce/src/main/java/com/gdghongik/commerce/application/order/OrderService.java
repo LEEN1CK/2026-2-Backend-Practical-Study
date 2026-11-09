@@ -6,9 +6,11 @@ import com.gdghongik.commerce.domain.common.Money;
 import com.gdghongik.commerce.domain.common.Quantity;
 import com.gdghongik.commerce.domain.order.Order;
 import com.gdghongik.commerce.domain.order.OrderItem;
-import com.gdghongik.commerce.domain.product.Product;
 import com.gdghongik.commerce.domain.order.OrderRepository;
+import com.gdghongik.commerce.domain.product.Product;
 import com.gdghongik.commerce.domain.product.ProductRepository;
+import com.gdghongik.commerce.infrastructure.persistence.OrderJpaRepository;
+import com.gdghongik.commerce.infrastructure.persistence.ProductJpaRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,18 +21,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class OrderService {
 
+    // 과제: 이 줄을 domain 의 OrderRepository 로 바꾸는 것이 이번 주 과제입니다.
     private final OrderRepository orderRepository;
 
+    // TODO[W3-2]: 이 줄도 domain 의 ProductRepository 로 바꾸세요.
     private final ProductRepository productRepository;
 
     @Transactional
     public Long place(CreateOrderCommand command) {
-
         Product product = productRepository.findById(command.productId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "상품이 존재하지 않습니다. id=" + command.productId()));
-
-        product.decreaseStock(Quantity.of(command.quantity()));
 
         OrderItem item = OrderItem.create(
                 product.getId(),

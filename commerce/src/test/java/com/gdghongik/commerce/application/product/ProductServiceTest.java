@@ -1,25 +1,50 @@
 package com.gdghongik.commerce.application.product;
 
+<<<<<<< HEAD:commerce/src/test/java/com/gdghongik/commerce/application/product/ProductServiceTest.java
 import com.gdghongik.commerce.domain.product.Product;
-import com.gdghongik.commerce.domain.product.ProductRepository;
+import com.gdghongik.commerce.infrastructure.persistence.ProductJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
+=======
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.gdghongik.commerce.entity.Product;
+import com.gdghongik.commerce.entity.Quantity;
+import com.gdghongik.commerce.repository.ProductRepository;
+>>>>>>> 8dcae08bde7f15116e8e272b5e3fde7b6fff8234:commerce/src/test/java/com/gdghongik/commerce/service/ProductServiceTest.java
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 /**
- * FakeProductRepository를 사용해 상품 서비스의 동작을 검증하는 단위 테스트입니다.
- * 실제 DB 반영과 트랜잭션 동작은 별도의 통합 테스트에서 검증합니다.
+ * 통합 테스트는 실제 DB나 와부 API 등과 연동하여 더 실무적인 관점에서 테스트합니다.
+ * 단위 테스트보다 실행 속도가 느리고 에러의 원인 추적이 복잡할 수 있습니다.
+ *
+ * @SpringBootTest: 실제로 SpringBoot를 구동시켜 테스트를 진행해봅니다.
+ * @ActiveProfiles: test 파일에서는 DataInitializer를 실행하지 않습니다.
+ * @Transactional: 테스트가 끝나면 저장한 데이터를 되돌립니다. 테스트 데이터가 원본 데이터에 섞이지 않도록 합니다.
  */
+// TODO[W3-5]: 아래 세 애노테이션을 지우고, 생성자로 ProductService 를 직접 만들어 쓰세요.
+//             FakeProductRepository 를 넘기면 됩니다. @Autowired 도 필요 없어집니다.
+// @SpringBootTest
+// @ActiveProfiles("test")
+// @Transactional
 class ProductServiceTest {
 
+    // @Autowired
     private ProductService productService;
-    private ProductRepository productRepository;
+
+    // @Autowired
+    private FakeProductRepository productRepository;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         productRepository = new FakeProductRepository();
         productService = new ProductService(productRepository);
     }
@@ -31,7 +56,7 @@ class ProductServiceTest {
         Product product = productRepository.save(new Product("기계식 키보드", 129_000L, 10));
 
         // when - 3개를 주문한다
-        productService.decreaseStock(product.getId(), 3);
+        productService.decreaseStock(product.getId(), Quantity.of(3));
 
         // then - 재고가 7개가 된다
         Product found = productRepository.findById(product.getId()).orElseThrow();
@@ -44,8 +69,13 @@ class ProductServiceTest {
         // given
         Product product = productRepository.save(new Product("기계식 키보드", 129_000L, 10));
 
+<<<<<<< HEAD
         // when & then, 상품을 0개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), Quantity.of(0)))
+=======
+        // when & then
         assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 0))
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("수량은 1개 이상이어야 합니다.");
     }
@@ -56,10 +86,17 @@ class ProductServiceTest {
         // given - 재고가 3개인 상품
         Product product = productRepository.save(new Product("무선 마우스", 45_000L, 3));
 
+<<<<<<< HEAD
         // when & then, 재고가 3개인 상품을 4개 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
-        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), Quantity.of(4)))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("재고가 부족합니다");
+=======
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("재고가 부족합니다.");
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
     }
 
     @Test
@@ -70,8 +107,13 @@ class ProductServiceTest {
         product.stopSelling();
         productRepository.save(product);
 
+<<<<<<< HEAD
         // when & then, 상태가 STOPPED인 상품을 사려고 시도할 때 적절한 예외를 반환하는지 확인합니다.
-        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 1))
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), Quantity.of(1)))
+=======
+        // when & then
+        assertThatThrownBy(() -> productService.decreaseStock(product.getId(), 4))
+>>>>>>> 54ae7e0cf574cdd4ee43ac01be83dccf403781e8
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("판매 중인 상품이 아닙니다.");
     }

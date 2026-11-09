@@ -1,8 +1,15 @@
 package com.gdghongik.commerce.domain.order;
 
 import com.gdghongik.commerce.domain.common.Money;
-import jakarta.persistence.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,8 +30,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    // 실험: fetch = FetchType.EAGER를 추가하고 주문 목록 조회 테스트를 실행하세요. SQL 개수를 확인한 뒤 fetch = FetchType.LAZY로 되돌리세요.
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private Order(OrderStatus status) {
@@ -67,6 +73,8 @@ public class Order {
 
         this.orderItems.remove(item);
 
+        // 항목을 전부 빼게 되면, 주문에는 항목이 1개 이상이어야 하는 불변식이 깨지게 됩니다.
+        // 따라서 항목이 0개가 된 주문은 취소된 주문으로 보게끔 구현했습니다.
         if (this.orderItems.isEmpty()) {
             this.status = OrderStatus.CANCELED;
         }
