@@ -1,0 +1,105 @@
+# GitHub Actions 화면에 표시될 워크플로 이름
+name: Week 6 CI/CD
+
+on:
+  # main 브랜치에 코드가 반영되면 실행
+  push:
+    branches: [main]
+
+  # GitHub Actions 화면에서 직접 실행하는 것도 허용
+  workflow_dispatch:
+
+# 저장소의 코드를 읽는 권한 부여
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    # GitHub에서 제공하는 Ubuntu 환경에서 작업 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      # CI
+
+      # 저장소의 코드를 실행 환경으로 가져오기
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 프로젝트 실행에 필요한 Java 21 설치
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # gradlew 파일을 실행할 수 있도록 권한 부여
+      - name: Grant execute permission for gradlew
+        working-directory: commerce
+        run: chmod +x gradlew
+
+      # 테스트를 실행하고 JAR 파일 생성
+      - name: Test and build with Gradle
+        working-directory: commerce
+        run: ./gradlew clean build --no-daemon
+
+      # CD
+
+      # GitHub Secrets에 저장한 정보로 Docker Hub 로그인
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Docker 이미지를 빌드하고 Docker Hub에 업로드
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          # commerce 폴더의 Dockerfile과 빌드 결과 사용
+          context: ./commerce
+
+          # EC2와 동일한 x86 아키텍처의 이미지 생성
+          platforms: linux/amd64
+
+          # 빌드한 이미지를 Docker Hub에 업로드
+          push: true
+
+          # 커밋마다 고유한 이미지 태그를 붙임
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/commerce:${{ github.sha }}
+
+      # SSH로 EC2에 접속해 새 이미지 실행
+      - name: Deploy to EC2
+        env:
+          # GitHub Secrets에 저장한 EC2 접속 정보
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_KNOWN_HOSTS: ${{ secrets.EC2_KNOWN_HOSTS }}
+
+          # 방금 빌드한 이미지 이름과 태그
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/commerce:${{ github.sha }}
+
+        run: |
+          # SSH 설정 파일을 저장할 폴더 준비
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          # 개인키와 서버 확인 정보를 파일로 생성
+          printf '%s\n' "$EC2_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$EC2_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+          # EC2에 접속해 아래 명령어 실행
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes "$EC2_USER@$EC2_HOST" bash -s -- "$IMAGE" <<'REMOTE'
+          set -eu
+          image="$1"
+
+          # Docker Hub에서 새 이미지 다운로드
+          sudo docker pull "$image"
+
+          # 기존 컨테이너가 있다면 중지하고 삭제
+          sudo docker rm -f commerce 2>/dev/null || true
+
+          # 새 이미지로 컨테이너 실행
+          sudo docker run -d --name commerce --restart unless-stopped -p 8080:8080 "$image"
+          REMOTE
